@@ -2,7 +2,7 @@ function setup(bone) {
 	function buildFileArray(files) {
 		files.forEach(function(file) {
 			file = path.resolve(file);
-			if(bone.fs.exists(file, {notFs: true})) {
+			if(bone.fs.existFile(file, {notFs: true})) {
 				var readStream = bone.fs.createReadStream(file);
 
 				var writeStream = bone.fs.createWriteStream(file);
@@ -29,7 +29,6 @@ function setup(bone) {
 			} else {
 				console.log('[warn] not exist project '+project);
 			}
-			process.exit(0);
 		})
 		.option('-l, --list <project>', 'list project contents', function(project) {
 			var files = bone.project(project);
@@ -40,7 +39,6 @@ function setup(bone) {
 			} else {
 				console.log('[warn] not exist project '+project);
 			}
-			process.exit(0);
 		})
 		.action(function() {
 			var files = Array.prototype.slice.call(arguments).slice(0, -1);
