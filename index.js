@@ -20,8 +20,10 @@ function setup(bone) {
 	var builder = bone.commander.command('build');
 	var fs = require('fs');
 	var path = require('path');
+	var pkg = require('./package.json');
 
 	builder.description('build file/project')
+		.version(pkg.version)
 		.option('-p, --project <project>', 'build project', function(project) {
 			var files = bone.project(project);
 			if(files) {
