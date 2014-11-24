@@ -7,11 +7,13 @@
 $ npm install bone-build
 ```
 
-在`bonefile.js`文件内载入bone-build
+在`bonefile.js`文件内通过`bone.cli()`载入bone-build
 
 ```js
 var bone = require('bone');
-require('bone-build')(bone);
+var build = require('bone-build')();
+
+bone.cli(build);
 ```
 
 ### 使用
