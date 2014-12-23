@@ -2,7 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var pkg = require('./package.json');
 
-function buildFileArray(files) {
+function buildFileArray(files, bone) {
 	files.forEach(function(file) {
 		file = path.resolve(file);
 		if(bone.fs.existFile(file, {notFs: true})) {
@@ -27,7 +27,7 @@ function setup() {
 			.option('-p, --project <project>', 'build project', function(project) {
 				var files = bone.project(project);
 				if(files) {
-					buildFileArray(files);
+					buildFileArray(files, bone);
 				} else {
 					console.log('[warn] not exist project '+project);
 				}
