@@ -7,7 +7,7 @@ function buildFileArray(files, bone) {
 		file = path.resolve(file);
 		if(bone.fs.existFile(file, {notFs: true})) {
 			var readStream = bone.fs.createReadStream(file);
-			var writeStream = bone.fs.createWriteStream(file);
+			var writeStream = bone.fs.createWriteStream(file, {focus: true});
 
 			readStream.pipe(writeStream, {end: false});
 			readStream.on('end', function() {
