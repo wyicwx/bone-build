@@ -46,7 +46,7 @@ function setup() {
 				var files = Array.prototype.slice.call(arguments).slice(0, -1);
 
 				if(files.length) {
-					buildFileArray(files);
+					buildFileArray(files, bone);
 				}
 			});
 	};
