@@ -1,6 +1,6 @@
 {
-  "name": "bone-build",
-  "version": "0.0.7",
+  "name": "bone-act-build",
+  "version": "0.0.8",
   "description": "",
   "main": "index.js",
   "scripts": {
