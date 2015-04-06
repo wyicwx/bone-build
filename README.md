@@ -1,17 +1,17 @@
-# bone-build
->bone build 
+# bone-cli-build
+>bone生成文件
 
 ### 安装
 
 ```sh
-$ npm install bone-build
+$ npm install bone-cli-build
 ```
 
-在`bonefile.js`文件内通过`bone.cli()`载入bone-build
+在`bonefile.js`文件内通过`bone.cli()`载入bone-cli-build
 
 ```js
 var bone = require('bone');
-var build = require('bone-build')();
+var build = require('bone-cli-build')();
 
 bone.cli(build);
 ```
