@@ -3,20 +3,32 @@ var path = require('path');
 var pkg = require('./package.json');
 
 function buildFileArray(files, bone) {
-	files.forEach(function(file) {
-		file = path.resolve(file);
-		if(bone.fs.existFile(file, {notFs: true})) {
-			var readStream = bone.fs.createReadStream(file);
-			var writeStream = bone.fs.createWriteStream(file, {focus: true});
-
-			readStream.pipe(writeStream, {end: false});
-			readStream.on('end', function() {
-				console.log('[build] '+file);
+	var build = function() {
+		var file = files.shift();
+		if(file) {
+			buildSingleFile(file, bone, function() {
+				build();
 			});
-		} else {
-			console.log('[warn] not exist '+file);
 		}
-	});
+	}
+	build();
+}
+
+function buildSingleFile(file, bone, callback) {
+	file = path.resolve(file);
+	if(bone.fs.existFile(file, {notFs: true})) {
+		var readStream = bone.fs.createReadStream(file);
+		var writeStream = bone.fs.createWriteStream(file, {focus: true});
+
+		readStream.pipe(writeStream, {end: false});
+		readStream.on('end', function() {
+			callback();
+			console.log('[build] '+file);
+		});
+	} else {
+		console.log('[warn] not exist '+file);
+		callback();
+	}
 }
 
 function setup() {
