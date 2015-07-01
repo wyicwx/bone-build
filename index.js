@@ -6,6 +6,9 @@ function buildFileArray(files, bone) {
 	var build = function() {
 		var file = files.shift();
 		if(file) {
+			/**
+			 * 受操作系统的限制一次性打开太多文件会报错，这里修改成生成构建好一个再构建下一个
+			 */
 			buildSingleFile(file, bone, function() {
 				build();
 			});
@@ -23,10 +26,10 @@ function buildSingleFile(file, bone, callback) {
 		readStream.pipe(writeStream, {end: false});
 		readStream.on('end', function() {
 			callback();
-			console.log('[build] '+file);
+			bone.log.log('build', file);
 		});
 	} else {
-		console.log('[warn] not exist '+file);
+		bone.log.warn('build', 'not exist: '+file);
 		callback();
 	}
 }
@@ -41,17 +44,17 @@ function setup() {
 				if(files) {
 					buildFileArray(files, bone);
 				} else {
-					console.log('[warn] not exist project '+project);
+					bone.log.warn('build', 'not exist project: '+project);
 				}
 			})
 			.option('-l, --list <project>', 'list project contents', function(project) {
 				var files = bone.project(project);
 				if(files) {
 					files.forEach(function(file) {
-						console.log('[file] '+file.replace(bone.fs.base, '~'));
+						bone.log.log('build', 'file: '+file.replace(bone.fs.base, '~'));
 					});
 				} else {
-					console.log('[warn] not exist project '+project);
+					bone.log.warn('build', 'not exist project: '+project);
 				}
 			})
 			.action(function() {
