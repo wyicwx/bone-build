@@ -29,7 +29,6 @@ function buildSingleFile(file, bone, callback) {
 			bone.log.log('build', file);
 		});
 	} else {
-		bone.log.warn('build', 'not exist: '+file);
 		callback();
 	}
 }
@@ -37,32 +36,12 @@ function buildSingleFile(file, bone, callback) {
 function setup() {
 	return function(command, bone) {
 		var builder = command('build');
-		builder.description('build file/project')
+		builder.description('build all file')
 			.version(pkg.version)
-			.option('-p, --project <project>', 'build project', function(project) {
-				var files = bone.project(project);
-				if(files) {
-					buildFileArray(files, bone);
-				} else {
-					bone.log.warn('build', 'not exist project: '+project);
-				}
-			})
-			.option('-l, --list <project>', 'list project contents', function(project) {
-				var files = bone.project(project);
-				if(files) {
-					files.forEach(function(file) {
-						bone.log.log('build', 'file: '+file.replace(bone.fs.base, '~'));
-					});
-				} else {
-					bone.log.warn('build', 'not exist project: '+project);
-				}
-			})
 			.action(function() {
-				var files = Array.prototype.slice.call(arguments).slice(0, -1);
+				var files = bone.fs.fileStack;
 
-				if(files.length) {
-					buildFileArray(files, bone);
-				}
+				buildFileArray(files, bone);
 			});
 	};
 }
