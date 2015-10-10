@@ -12,6 +12,12 @@ function buildFileArray(files, bone) {
 			buildSingleFile(file, bone, function() {
 				build();
 			});
+		} else {
+			if(bone.log.warn.count > 0) {
+				bone.log.info('bone-build', ('status: unknown, warn: ('+bone.log.warn.count+')').yellow);
+			} else {
+				bone.log.info('bone-build', ('status: success, warn: ('+bone.log.warn.count+')').green);
+			}
 		}
 	}
 	build();
@@ -22,11 +28,12 @@ function buildSingleFile(file, bone, callback) {
 	if(bone.fs.existFile(file, {notFs: true})) {
 		var readStream = bone.fs.createReadStream(file);
 		var writeStream = bone.fs.createWriteStream(file, {focus: true});
+		var cwd = process.cwd();
 
 		readStream.pipe(writeStream, {end: false});
 		readStream.on('end', function() {
+			bone.log.info('bone-build', path.relative(cwd, file));
 			callback();
-			bone.log.log('build', file);
 		});
 	} else {
 		callback();
