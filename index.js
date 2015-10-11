@@ -3,6 +3,7 @@ var path = require('path');
 var pkg = require('./package.json');
 
 function buildFileArray(files, bone) {
+	var total = files.length;
 	var build = function() {
 		var file = files.shift();
 		if(file) {
@@ -14,9 +15,9 @@ function buildFileArray(files, bone) {
 			});
 		} else {
 			if(bone.log.warn.count > 0) {
-				bone.log.info('bone-build', ('status: unknown, warn: ('+bone.log.warn.count+')').yellow);
+				bone.log.info('bone-build', ('status: unknown, total: '+total+' file, warn: ('+bone.log.warn.count+')').yellow);
 			} else {
-				bone.log.info('bone-build', ('status: success, warn: ('+bone.log.warn.count+')').green);
+				bone.log.info('bone-build', ('status: success, total: '+total+' file, warn: ('+bone.log.warn.count+')').green);
 			}
 		}
 	}
