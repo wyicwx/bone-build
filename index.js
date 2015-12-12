@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var pkg = require('./package.json');
+var bonefs;
 
 function buildFileArray(files, bone) {
 	var total = files.length;
@@ -26,9 +27,9 @@ function buildFileArray(files, bone) {
 
 function buildSingleFile(file, bone, callback) {
 	file = path.resolve(file);
-	if(bone.fs.existFile(file, {notFs: true})) {
-		var readStream = bone.fs.createReadStream(file);
-		var writeStream = bone.fs.createWriteStream(file, {focus: true});
+	if(bonefs.existFile(file, {notFs: true})) {
+		var readStream = bonefs.createReadStream(file);
+		var writeStream = bonefs.createWriteStream(file, {focus: true});
 		var cwd = process.cwd();
 
 		readStream.pipe(writeStream, {end: false});
@@ -42,12 +43,17 @@ function buildSingleFile(file, bone, callback) {
 }
 
 function setup() {
-	return function(command, bone) {
+	return function(command, bone, fs) {
 		var builder = command('build');
 		builder.description('build all file')
 			.version(pkg.version)
 			.action(function() {
-				var files = bone.fs.fileStack;
+				bonefs = fs;
+				if(bone.fs) {
+					var files = bone.utils.keys(bone.fs.files);
+				} else {
+					var files = bone.utils.fs.getAllVirtualFiles();
+				}
 
 				buildFileArray(files, bone);
 			});
