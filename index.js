@@ -37,6 +37,9 @@ function buildSingleFile(file, bone, callback) {
 			bone.log.info('bone-build', path.relative(cwd, file));
 			callback();
 		});
+		readStream.on('error', function(error) {
+			throw error;
+		});
 	} else {
 		callback();
 	}
