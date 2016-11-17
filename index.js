@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var pkg = require('./package.json');
 var bonefs;
+var options;
 
 function buildFileArray(files, bone) {
 	var total = files.length;
@@ -15,6 +16,11 @@ function buildFileArray(files, bone) {
 				build();
 			});
 		} else {
+			var data = require('bone/lib/data.js');
+			if(options.showDependentTrace) {
+				console.log('data.virtualFileTraceTree');
+				console.log(data.virtualFileTraceTree);
+			}
 			if(bone.log.warn.count > 0) {
 				bone.log.info('bone-build', ('status: unknown, total: '+total+' file, warn: ('+bone.log.warn.count+')').yellow);
 			} else {
@@ -45,7 +51,9 @@ function buildSingleFile(file, bone, callback) {
 	}
 }
 
-function setup() {
+function setup(opts) {
+	options = opts || {};
+
 	return function(command, bone, fs) {
 		var builder = command('build');
 		builder.description('build all file')
