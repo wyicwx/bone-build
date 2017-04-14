@@ -43,13 +43,13 @@ function buildSingleFile(file, bone, callback) {
 		readStream.pipe(writeStream, {end: false});
 		readStream.on('end', function() {
 			bone.log.info('bone-build', path.relative(cwd, file));
-			callback();
+			callback && callback();
 		});
 		readStream.on('error', function(error) {
 			throw error;
 		});
 	} else {
-		callback();
+		callback && callback();
 	}
 }
 
