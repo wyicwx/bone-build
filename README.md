@@ -23,13 +23,12 @@ bone.cli(build);
 $ bone build --help
 ```
 
-生成一个文件
+构建全部文件
 ```sh
-$ bone build ./dist/file.js
+$ bone build
 ```
 
-生成项目文件
-
+构建文件并监听
 ```sh
-$ bone build -p project
+$ bone build --watch
 ```

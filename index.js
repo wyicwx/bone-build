@@ -4,7 +4,7 @@ var pkg = require('./package.json');
 var bonefs;
 var options;
 
-function buildFileArray(files, bone) {
+function buildFileArray(files, bone, callback) {
 	var total = files.length;
 	var build = function() {
 		var file = files.shift();
@@ -26,6 +26,8 @@ function buildFileArray(files, bone) {
 			} else {
 				bone.log.info('bone-build', ('status: success, total: '+total+' file, warn: ('+bone.log.warn.count+')').green);
 			}
+
+			callback && callback();
 		}
 	}
 	build();
@@ -58,7 +60,8 @@ function setup(opts) {
 		var builder = command('build');
 		builder.description('build all file')
 			.version(pkg.version)
-			.action(function() {
+			.option('--watch, -w', 'watch file to build.')
+			.action(function(argv) {
 				bonefs = fs;
 				if(bone.fs) {
 					var files = bone.utils.keys(bone.fs.files);
@@ -66,7 +69,22 @@ function setup(opts) {
 					var files = bone.utils.fs.getAllVirtualFiles();
 				}
 
-				buildFileArray(files, bone);
+				if (argv.W) { // watch
+					var watcher = bone.watch();
+				}
+
+				buildFileArray(files, bone, function() {
+					if (argv.W) {
+						bone.log.info('bone-build', 'start watch file...');
+						watcher.on('changed', function(file) {
+							var dependenics = bone.utils.fs.getByDependentFile(file);
+
+							dependenics.forEach(function(f) {
+								buildSingleFile(f, bone);
+							});
+						});
+					}
+				});
 			});
 	};
 }
