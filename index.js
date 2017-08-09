@@ -90,5 +90,5 @@ function setup(opts) {
 }
 
 module.exports = setup;
-module.buildSingleFile = buildSingleFile;
-module.buildFileArray = buildFileArray;
+module.exports.buildSingleFile = buildSingleFile;
+module.exports.buildFileArray = buildFileArray;
