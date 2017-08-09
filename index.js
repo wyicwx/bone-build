@@ -53,6 +53,10 @@ function buildSingleFile(file, bone, callback) {
 	}
 }
 
+function setupFs(fs) {
+	bonefs = fs; 
+}
+
 function setup(opts) {
 	options = opts || {};
 
@@ -62,7 +66,7 @@ function setup(opts) {
 			.version(pkg.version)
 			.option('--watch, -w', 'watch file to build.')
 			.action(function(argv) {
-				bonefs = fs;
+				setupFs(fs);
 				if(bone.fs) {
 					var files = bone.utils.keys(bone.fs.files);
 				} else {
@@ -90,5 +94,6 @@ function setup(opts) {
 }
 
 module.exports = setup;
+module.exports.setupFs = setupFs;
 module.exports.buildSingleFile = buildSingleFile;
 module.exports.buildFileArray = buildFileArray;
